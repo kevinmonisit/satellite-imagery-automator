@@ -6,14 +6,14 @@ import threading
 
 def download_tile(url, headers, channels):
     response = requests.get(url, headers=headers)
-    arr =  np.asarray(bytearray(response.content), dtype=np.uint8)
-    
+    arr = np.asarray(bytearray(response.content), dtype=np.uint8)
+
     if channels == 3:
         return cv2.imdecode(arr, 1)
     return cv2.imdecode(arr, -1)
 
 
-# Mercator projection 
+# Mercator projection
 # https://developers.google.com/maps/documentation/javascript/examples/map-coordinates
 def project_with_scale(lat, lon, scale):
     siny = np.sin(lat * np.pi / 180)
@@ -24,7 +24,7 @@ def project_with_scale(lat, lon, scale):
 
 
 def download_image(lat1: float, lon1: float, lat2: float, lon2: float,
-    zoom: int, url: str, headers: dict, tile_size: int = 256, channels: str = 3) -> np.ndarray:
+                   zoom: int, url: str, headers: dict, tile_size: int = 256, channels: str = 3) -> np.ndarray:
     """
     Downloads a map region. Returns an image stored either in BGR or BGRA as a `numpy.ndarray`.
 
@@ -94,15 +94,15 @@ def download_image(lat1: float, lon1: float, lat2: float, lon2: float,
         thread = threading.Thread(target=build_row, args=[i])
         thread.start()
         threads.append(thread)
-    
+
     for thread in threads:
         thread.join()
-    
+
     return img
 
 
 def image_size(lat1: float, lon1: float, lat2: float,
-    lon2: float, zoom: int, tile_size: int = 256):
+               lon2: float, zoom: int, tile_size: int = 256):
     """ Calculates the size of an image without downloading it. Returns a `(width, height)` tuple. """
 
     scale = 1 << zoom

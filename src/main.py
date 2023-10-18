@@ -2,6 +2,8 @@ import os
 import json
 import re
 import cv2
+import threading
+from helper import calculate_bottom_right, get_dd_from_poi, download_image_from_poi
 from datetime import datetime
 
 from image_downloading import download_image
@@ -23,11 +25,9 @@ default_prefs = {
             'sec-fetch-site': 'none',
             'sec-fetch-user': '?1',
             'upgrade-insecure-requests': '1',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36'
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) \
+                Chrome/99.0.4844.82 Safari/537.36'
         },
-        'tl': '',
-        'br': '',
-        'zoom': ''
     }
 
 
@@ -44,6 +44,11 @@ def take_input(messages):
     return inputs
 
 
+points_of_interest_filename = 'POIs.txt'
+size_of_tile_in_meters = 1000
+zoom = 20
+
+
 def run():
     with open(os.path.join(file_dir, 'preferences.json'), 'r', encoding='utf-8') as f:
         prefs = json.loads(f.read())
@@ -51,35 +56,21 @@ def run():
     if not os.path.isdir(prefs['dir']):
         os.mkdir(prefs['dir'])
 
-    if (prefs['tl'] == '') or (prefs['br'] == '') or (prefs['zoom'] == ''):
-        messages = ['Top-left corner: ', 'Bottom-right corner: ', 'Zoom level: ']
-        inputs = take_input(messages)
-        if inputs is None:
-            return
-        else:
-            prefs['tl'], prefs['br'], prefs['zoom'] = inputs
+    if not os.path.isfile(points_of_interest_filename):
+        print(f'File {points_of_interest_filename} not found.')
+        return
 
-    lat1, lon1 = re.findall(r'[+-]?\d*\.\d+|d+', prefs['tl'])
-    lat2, lon2 = re.findall(r'[+-]?\d*\.\d+|d+', prefs['br'])
+    points_of_interests = get_dd_from_poi(points_of_interest_filename)
 
-    zoom = int(prefs['zoom'])
-    lat1 = float(lat1)
-    lon1 = float(lon1)
-    lat2 = float(lat2)
-    lon2 = float(lon2)
+    batch_id = datetime.now().strftime('z{zoom}_%Y-%m-%d_%H-%M-%S'.format(zoom=zoom))
+    batch_directory = os.path.join(prefs['dir'], batch_id)
+    os.mkdir(batch_directory)
 
-    if prefs['tile_format'].lower() == 'png':
-        channels = 4
-    else:
-        channels = 3
-
-    img = download_image(lat1, lon1, lat2, lon2, zoom, prefs['url'],
-        prefs['headers'], prefs['tile_size'], channels)
-
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    name = f'img_{timestamp}.png'
-    cv2.imwrite(os.path.join(prefs['dir'], name), img)
-    print(f'Saved as {name}')
+    counter = 0
+    for poi in points_of_interests:
+        counter += 1
+        download_image_from_poi(poi, counter, batch_directory,
+                                prefs, zoom, size_of_tile_in_meters)
 
 
 if os.path.isfile(prefs_path):
