@@ -1,0 +1,50 @@
+
+JSON:
+{
+"data": [
+  [Red values of image 1],
+  [Green values of image 1],
+  [Blue values of image 1],
+
+  [Red values of image 2],
+  [Green values of image 2],
+  [Blue values of image 2],
+
+  .....
+
+  [Red values of image N],
+  [Green values of image N],
+  [Blue values of image N],
+]
+
+
+"labels:" [
+  0/1 based on image 1's classification,
+  1, 0, 1, 1, ....
+]
+
+}
+
+
+Image Format Name:
+
+image_{image_index}_XY-{x val}-{y val} ---> (x, y in a 3x3 grid corresponding to coordinates)
+
+/images
+  image_1
+    image_1_XY-0_0
+    image_1_XY-0_1
+    image_1_XY-0_2
+    image_1_XY-1_0
+    image_1_XY-1_1
+    image_1_XY-1_2
+    image_1_XY-2_0
+    image_1_XY-2_1
+    image_1_XY-2_2
+
+/convert_images_in
+  ---> place images here to convert to RGB arrays
+
+/convert_images_out
+  ----> JSON arrays
+

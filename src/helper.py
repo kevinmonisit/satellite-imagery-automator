@@ -46,13 +46,15 @@ def get_dd_from_poi(filename):
                 lon = float(lon)
                 lat = float(lat)
 
-            print(lon, lat)
             coords_of_interest.append((lon, lat))
 
     return coords_of_interest
 
 
-def download_image_from_poi(poi, image_id, batch_dir, prefs, zoom, size_of_tile_in_meters):
+def download_image_from_poi(poi, image_id, batch_dir, prefs,
+                            zoom, size_of_tile_in_meters,
+                            get_adjacent_tiles=False):
+    print("Downloading image {image_id}...".format(image_id=image_id))
     lat1, lon1 = poi
 
     lat1 = float(lat1)

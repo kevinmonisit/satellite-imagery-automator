@@ -1,0 +1,22 @@
+
+
+- Get adjacent tiles.
+  - 300x300 center tile
+  - 9 pictures
+  - Go through each one
+  - Delete/Move somewhere else
+
+- Double check with Ship Classifier
+  - 20 images
+  - Run end to end
+  - Don't care about results
+
+
+
+10/25/23
+
+
+- download a 250x250 tile
+  - Split by X by X tiles
+- Then put into jupyter notebooks
+

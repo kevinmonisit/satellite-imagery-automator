@@ -91,6 +91,7 @@ def download_image(lat1: float, lon1: float, lat2: float, lon2: float,
 
     threads = []
     for i in range(tl_tile_y, br_tile_y + 1):
+        print("Downloading row {i}...".format(i=i))
         thread = threading.Thread(target=build_row, args=[i])
         thread.start()
         threads.append(thread)

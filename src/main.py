@@ -44,9 +44,10 @@ def take_input(messages):
     return inputs
 
 
-points_of_interest_filename = 'POIs.txt'
-size_of_tile_in_meters = 1000
+points_of_interest_filename = './input/POIs.txt'
+size_of_tile_in_meters = 100
 zoom = 20
+get_adjacent_tiles = True
 
 
 def run():
@@ -70,7 +71,8 @@ def run():
     for poi in points_of_interests:
         counter += 1
         download_image_from_poi(poi, counter, batch_directory,
-                                prefs, zoom, size_of_tile_in_meters)
+                                prefs, zoom, size_of_tile_in_meters,
+                                get_adjacent_tiles)
 
 
 if os.path.isfile(prefs_path):

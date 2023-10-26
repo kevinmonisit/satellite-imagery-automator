@@ -15,6 +15,8 @@ Make sure you have Python 3 installed.
 
 Install the required packages.
 ```cmd
+python -m env venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 Run `main.py`.
@@ -29,7 +31,7 @@ Google Maps satellite imagery will be used by default.
 
 ### Preferences file
 * `"url"` is the URL template that the program will use to download map tiles.
-* `"tile_size"` is the size of a single tile in pixels. The default is 256. 
+* `"tile_size"` is the size of a single tile in pixels. The default is 256.
 * `"tile_format"` determines how tiles will be decoded as well as the number of channels in the final image. The default is `"jpg"`. Use `"png"` for transparent tiles, such as in roads-only layers.
 * `"dir"` is the directory where your images will be saved. If the directory doesn't exist, it will be created automatically.
 * `"headers"` are the headers that the program will use to make HTTP requests.
