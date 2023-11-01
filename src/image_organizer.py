@@ -40,16 +40,19 @@ class ImageOrganizer(tk.Tk):
 
     def key_pressed(self, event):
         if event.char == 'l':
-            self.move_image(self.dir_y)
+            self.move_image(self.dir_y, prefix="0_")
         elif event.char == 'r':
-            self.move_image(self.dir_z)
+            self.move_image(self.dir_z, prefix="1_")
         elif event.char == 'z':
             self.undo_move()
 
-    def move_image(self, target_dir):
+    def move_image(self, target_dir, prefix=""):
         if self.image_files:
             src_path = os.path.join(self.image_dir, self.image_files.pop(0))
-            shutil.move(src_path, os.path.join(target_dir, os.path.basename(src_path)))
+
+            new_file_name = prefix + os.path.basename(src_path)
+            shutil.move(src_path, os.path.join(target_dir, new_file_name))
+
             self.undo_stack.append((src_path, target_dir))
             self.canvas.delete("all")
             self.load_image()
@@ -65,12 +68,17 @@ class ImageOrganizer(tk.Tk):
 
 if __name__ == '__main__':
     import argparse
+
+    class_0_foldername = '0'
+    class_1_foldername = '1'
+
     parser = argparse.ArgumentParser(description='Move images between directories based on user input.')
     parser.add_argument('image_dir', help='Path to the directory containing images.')
-    parser.add_argument('dir_y', help='Path to the first target directory.')
-    parser.add_argument('dir_z', help='Path to the second target directory.')
 
     args = parser.parse_args()
 
-    app = ImageOrganizer(args.image_dir, args.dir_y, args.dir_z)
+    class_0_dir = os.path.join(args.image_dir, class_0_foldername)
+    class_1_dir = os.path.join(args.image_dir, class_1_foldername)
+
+    app = ImageOrganizer(args.image_dir, class_0_dir, class_1_dir)
     app.mainloop()

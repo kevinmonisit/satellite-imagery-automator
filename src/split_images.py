@@ -2,7 +2,7 @@ from PIL import Image
 import numpy as np
 import os
 import sys
-import json
+from datetime import datetime
 import shutil
 
 
@@ -56,6 +56,13 @@ if __name__ == '__main__':
     if not os.path.isdir('out/partitions'):
         os.mkdir('out/partitions')
 
+    batch_id = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    batch_directory = os.path.join('out/partitions/', batch_id)
+    os.mkdir(batch_directory)
+
+    class_0_dir = os.mkdir(os.path.join(batch_directory, '0'))
+    class_1_dir = os.mkdir(os.path.join(batch_directory, '1'))
+
     data = []
     labels = []
 
@@ -68,8 +75,8 @@ if __name__ == '__main__':
         if image_name.endswith('.png') is False:
             continue
 
-        output_folder = os.path.join('out/partitions',
-                                     '{image_name}_partitions'.format(image_name=image_name))
-        create_directory(output_folder)
+        # output_folder = os.path.join('out/partitions',
+        #                              '{image_name}_partitions'.format(image_name=image_name))
+        # create_directory(output_folder)
 
-        res = split_image(os.path.join(input_dir, image_name), output_folder, partitions)
+        res = split_image(os.path.join(input_dir, image_name), batch_directory, partitions)
