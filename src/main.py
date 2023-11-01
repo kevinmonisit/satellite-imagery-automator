@@ -45,7 +45,7 @@ def take_input(messages):
 
 
 points_of_interest_filename = './input/POIs.txt'
-size_of_tile_in_meters = 100
+size_of_tile_in_meters = 250
 zoom = 20
 get_adjacent_tiles = True
 
